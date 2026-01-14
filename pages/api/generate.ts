@@ -4,7 +4,6 @@ type RequestData = {
   messageText: string;
 };
 
-
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
 }
@@ -16,16 +15,15 @@ export const config = {
 let message_junk = "";
 
 const handler = async (req: Request): Promise<Response> => {
-  
   const { messageText } = (await req.json()) as RequestData;
-  message_junk += `${messageText} \n` ;
+  message_junk += `${messageText} \n`;
 
   if (!messageText) {
     return new Response("No prompt in the request", { status: 400 });
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "gpt-5-nano",
+    model: "gpt-3.5-turbo-instruct",
     prompt: message_junk,
     temperature: 0.7,
     top_p: 1,
@@ -37,7 +35,7 @@ const handler = async (req: Request): Promise<Response> => {
   };
 
   const stream = await OpenAIStream(payload);
-  return new Response(stream);
+  return new Response(null);
 };
 
 export default handler;

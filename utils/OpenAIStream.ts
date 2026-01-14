@@ -16,12 +16,33 @@ export interface OpenAIStreamPayload {
   n: number;
 }
 
+import client, { OpenAI } from "openai";
+
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
+  const client = new OpenAI();
 
   let counter = 0;
 
+  const stream = await client.responses.create({
+    model: "gpt-5",
+    input: [
+      {
+        role: "user",
+        content: payload.prompt,
+      },
+    ],
+    stream: true,
+  });
+
+  for await (const event of stream) {
+    console.log(event);
+  }
+
+  //return stream;
+
+  /*
   const res = await fetch("https://api.openai.com/v1/completions", {
     headers: {
       "Content-Type": "application/json",
@@ -67,6 +88,6 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
       }
     },
   });
-
-  return stream;
+  */
+  //return stream;
 }
