@@ -25,7 +25,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "gpt-3.5-turbo-instruct",
+    model: "gpt-5-nano",
     prompt: message_junk,
     temperature: 0.7,
     top_p: 1,
